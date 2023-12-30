@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CakeBuild", "VintageStoryMod2\CakeBuild\CakeBuild.csproj", "{E069D9E2-B984-4E32-AF89-8F60479DE61A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mouse4And5", "VintageStoryMod2\Mouse4And5\Mouse4And5.csproj", "{95867195-9CC8-4B7E-98A9-7DDA17DC99DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E069D9E2-B984-4E32-AF89-8F60479DE61A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E069D9E2-B984-4E32-AF89-8F60479DE61A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E069D9E2-B984-4E32-AF89-8F60479DE61A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E069D9E2-B984-4E32-AF89-8F60479DE61A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95867195-9CC8-4B7E-98A9-7DDA17DC99DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95867195-9CC8-4B7E-98A9-7DDA17DC99DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95867195-9CC8-4B7E-98A9-7DDA17DC99DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95867195-9CC8-4B7E-98A9-7DDA17DC99DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
