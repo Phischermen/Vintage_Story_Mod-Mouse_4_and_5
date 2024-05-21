@@ -25,18 +25,16 @@ namespace VintageStoryMod2
         private static readonly MethodInfo XorMouse5AndSneakMethodInfo =
             AccessTools.Method(typeof(Mouse4And5), nameof(XorMouse5AndSneak));
         
-        
         public static readonly string ModId = "mouse4and5";
-        
+
         public static event Action Mouse4DownChanged;
         public static event Action Mouse5DownChanged;
-        
+
         public static bool Mouse4Down { get; private set; }
         public static bool Mouse5Down { get; private set; }
 
         public static ModConfig ModConfig { get; private set; }
         public Harmony Harmony { get; private set; }
-
 
         public override void StartPre(ICoreAPI api)
         {
@@ -57,56 +55,43 @@ namespace VintageStoryMod2
             Harmony = new Harmony(ModId);
             Harmony.PatchAll();
 
-            if (ModConfig.NoHud == false)
-            {
-                var hud = new MyHUD(capi);
-                hud.TryOpen();   
-            }
-
-            capi.Event.MouseDown += (e) =>
+            RegisterHotKeyHelper(capi, "mouse4", I18N("mouse4"), EnumMouseButton.Button4);
+            RegisterHotKeyHelper(capi, "mouse5", I18N("mouse5"), EnumMouseButton.Button5);
+            capi.Input.SetHotKeyHandler("mouse4", (keyComb) =>
             {
                 if (ModConfig.ToggleHold)
                 {
-                    if (e.Button == EnumMouseButton.Button5)
-                    {
-                        Mouse5Down = !Mouse5Down;
-                        Mouse5DownChanged?.Invoke();
-                    }
-                    else if (e.Button == EnumMouseButton.Button4)
-                    {
-                        Mouse4Down = !Mouse4Down;
-                        Mouse4DownChanged?.Invoke();
-                    }
+                    Mouse4Down = !Mouse4Down;
                 }
                 else
                 {
-                    if (e.Button == EnumMouseButton.Button5)
-                    {
-                        Mouse5Down = true;
-                        Mouse5DownChanged?.Invoke();
-                    }
-                    else if (e.Button == EnumMouseButton.Button4)
-                    {
-                        Mouse4Down = true;
-                        Mouse4DownChanged?.Invoke();
-                    }
+                    Mouse4Down = !keyComb.OnKeyUp;
                 }
-            };
 
-            capi.Event.MouseUp += (e) =>
+                Mouse4DownChanged?.Invoke();
+                return true;
+            });
+
+            capi.Input.SetHotKeyHandler("mouse5", (keyComb) =>
             {
-                if (!ModConfig.ToggleHold)
+                if (ModConfig.ToggleHold)
                 {
-                    if (e.Button == EnumMouseButton.Button5)
-                    {
-                        Mouse5Down = false;
-                    }
-                    else if (e.Button == EnumMouseButton.Button4)
-                    {
-                        Mouse4Down = false;
-                    }
+                    Mouse5Down = !Mouse5Down;
                 }
-            };
+                else
+                {
+                    Mouse5Down = !keyComb.OnKeyUp;
+                }
+
+                Mouse5DownChanged?.Invoke();
+                return true;
+            });
+
+            if (ModConfig.NoHud == false)
+            {
+                var hud = new MyHUD(capi);
+                hud.TryOpen();
+            }
         }
 
         public override void Dispose()
@@ -200,10 +185,29 @@ namespace VintageStoryMod2
         {
             return ogInput ^ (Mouse5Down && ModConfig.Mouse5Sneak);
         }
-        
+
         public static string I18N(string key)
         {
             return Lang.Get($"{ModId}:{key}");
+        }
+
+        private static void RegisterHotKeyHelper(
+            ICoreClientAPI capi,
+            string key,
+            string description,
+            EnumMouseButton button)
+        {
+            /*
+             * KF 5/20/2024: I did some digging and found that if you add 240 to EnumMouseButton, you get a value that
+             * can be used as a keycode for the hotkey system. This is useful because the API only allows a GlKeys enum
+             * parameter to be passed to the RegisterHotKey method. This is a workaround to add a mouse 4 and mouse 5
+             * hotkey - the developers likely are not ready to add this feature to the API yet, since it is not possible
+             * to rebind mouse 4 and 5 in the settings ONLY because the mouse control settings gui cuts off the option
+             * to lol.
+             */
+            var keyCode = (int)button + 240;
+            capi.Input.RegisterHotKey(key, description, (GlKeys)keyCode, HotkeyType.MouseControls);
+            capi.Input.GetHotKeyByCode(key).TriggerOnUpAlso = true;
         }
     }
 }

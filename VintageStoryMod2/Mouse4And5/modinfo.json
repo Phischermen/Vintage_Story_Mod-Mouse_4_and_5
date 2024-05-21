@@ -6,9 +6,9 @@
         "Phischermen"
     ],
     "description": "Allows you to use mouse buttons 4 and 5 to perform 'shift' and 'ctrl' click actions, and also allows you to sprint and sneak using those buttons.",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "side": "Client",
     "dependencies": {
-        "game": ""
+        "game": "1.19.*"
     }
 }
